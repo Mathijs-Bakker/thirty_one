@@ -38,5 +38,7 @@ pub(crate) fn create_deck_of_cards() -> Vec<Card<'static>> {
         }
     }
 
+    log::info!("Generated a new deck of {:?} cards.", deck.len());
+
     deck
 }

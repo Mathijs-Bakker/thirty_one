@@ -14,6 +14,7 @@ impl Player {
 }
 
 pub(crate) fn setup_players(players: &mut Vec<Player>) {
+    log::info!("Setup players");
     players.clear();
 
     // Give player names
@@ -32,4 +33,5 @@ pub(crate) fn setup_players(players: &mut Vec<Player>) {
     // Shuffle players to determine which player starts
     let mut rng = thread_rng();
     players.shuffle(&mut rng);
+    log::info!("Players shuffled.");
 }

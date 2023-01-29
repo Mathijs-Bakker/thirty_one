@@ -27,7 +27,7 @@ fn main() {
         match game_state {
             GameState::GameOver => start_new_game(&mut game_state),
             GameState::Quit => {
-                println!("Program terminated.");
+                log::info!("Application terminated.");
                 break;
             }
             GameState::StartNewGame => {
@@ -52,14 +52,15 @@ fn start_new_game(game_state: &mut GameState) {
             Ok(_) => {
                 if user_input == "y\n" {
                     *game_state = GameState::StartNewGame;
-                    println!("Start new game!");
+                    log::info!("Commencing a new game.");
                 }
                 if user_input == "q\n" {
                     *game_state = GameState::Quit;
+                    log::info!("User quitted.");
                 }
             }
             Err(e) => {
-                println!("Error: {e}");
+                log::error!("Unable to start a new game: {}", e);
             }
         }
     }
