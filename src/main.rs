@@ -1,30 +1,61 @@
 #![warn(clippy::all, clippy::pedantic)]
-use std::io::Write;
-use std::io::{stdin, stdout};
+
+mod card_deck;
+mod player;
+use crate::card_deck::Card;
+use player::Player;
+use rand::{seq::SliceRandom, thread_rng};
+use std::io::stdin;
+
+use crate::card_deck::create_deck_of_cards;
+
+enum GameState {
+    ActiveGame,
+    GameOver,
+    Quit,
+    StartNewGame,
+}
 
 fn main() {
-    let mut is_game_over = true;
+    let mut game_state = GameState::GameOver;
+    let mut players: Vec<Player> = vec![];
+
+    // let mut deck: Vec<Card> = Vec::new();
+    let mut deck: Vec<Card> = create_deck_of_cards();
 
     loop {
-        start_new_game(&mut is_game_over);
+        match game_state {
+            GameState::GameOver => start_new_game(&mut game_state),
+            GameState::Quit => {
+                println!("Program terminated.");
+                break;
+            }
+            GameState::StartNewGame => {
+                player::setup_players(&mut players);
+                deck.shuffle(&mut thread_rng());
+            }
+            GameState::ActiveGame => todo!(),
+        }
 
-        if is_game_over {
-            println!("Game Over");
+        for card in &deck {
+            println!("Card: {:?}", card);
         }
     }
 }
 
-fn start_new_game(is_game_over: &mut bool) {
-    if *is_game_over {
-        let mut input = String::new();
-        println!("Start? (y/n)");
-        let _ = stdout().flush();
+fn start_new_game(game_state: &mut GameState) {
+    if let GameState::GameOver = game_state {
+        let mut user_input = String::new();
+        println!("Start? (y/q)");
 
-        match stdin().read_line(&mut input) {
+        match stdin().read_line(&mut user_input) {
             Ok(_) => {
-                if input == "y\n" {
-                    *is_game_over = false;
+                if user_input == "y\n" {
+                    *game_state = GameState::StartNewGame;
                     println!("Start new game!");
+                }
+                if user_input == "q\n" {
+                    *game_state = GameState::Quit;
                 }
             }
             Err(e) => {
