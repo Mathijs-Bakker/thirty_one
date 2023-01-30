@@ -13,9 +13,10 @@ use crate::card_deck::create_deck_of_cards;
 
 fn main() {
     let mut game_state = game::GameState::GameOver;
-    let mut players: Vec<Player> = Vec::new();
 
     let mut deck: Vec<Card> = create_deck_of_cards();
+    let mut players: Vec<Player> = Vec::new();
+    let mut table: Vec<Card> = Vec::new();
 
     loop {
         match game_state {
@@ -29,25 +30,45 @@ fn main() {
                 deck.shuffle(&mut thread_rng());
                 game_state = GameState::ActiveGame;
             }
-            GameState::ActiveGame => deal_cards(&mut players, &mut deck),
+            GameState::ActiveGame => {
+                deal_player_cards(&mut deck, &mut players);
+                deal_table_cards(&mut deck, &mut table);
+            }
         }
-
-        // for card in &deck {
-        //     println!("Card: {:?}", card);
-        // }
     }
 }
 
-fn deal_cards<'a>(players: &mut Vec<Player<'a>>, card_deck: &mut Vec<Card<'a>>) {
+const MAX_CARDS: usize = 3;
+
+fn deal_table_cards<'a>(card_deck: &mut Vec<Card<'a>>, table: &mut Vec<Card<'a>>) {
+    if table.is_empty() {
+        for _ in 0..MAX_CARDS {
+            let top_card = &card_deck[card_deck.len() - 1];
+
+            table.push(*top_card);
+            log::info!("deal_table_cards() - Table got {:?} ", top_card);
+
+            card_deck.pop();
+        }
+    }
+}
+
+fn deal_player_cards<'a>(card_deck: &mut Vec<Card<'a>>, players: &mut Vec<Player<'a>>) {
     for player in players {
-        // if player.hand.is_empty() {
-        let top_card = &card_deck[card_deck.len() - 1];
-        println!("top card {:?}", top_card);
+        if player.hand.is_empty() {
+            for _ in 0..MAX_CARDS {
+                let top_card = &card_deck[card_deck.len() - 1];
 
-        player.hand.push(*top_card);
+                player.hand.push(*top_card);
 
-        println!("Computer dealt {:?} to player {:?}", top_card, player.name);
-        card_deck.pop();
-        // }
+                log::info!(
+                    "deal_player_cards() - Player {:?} got {:?}",
+                    player.name,
+                    top_card
+                );
+
+                card_deck.pop();
+            }
+        }
     }
 }
