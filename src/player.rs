@@ -1,15 +1,22 @@
 use rand::seq::SliceRandom;
 use rand::thread_rng;
 
+use crate::card_deck::Card;
+
 #[derive(Debug)]
-pub struct Player {
-    name: String,
-    points: u8,
+pub struct Player<'a> {
+    pub name: String,
+    pub points: u8,
+    pub hand: Vec<Card<'a>>,
 }
 
-impl Player {
+impl<'a> Player<'a> {
     pub fn new(name: String) -> Self {
-        Self { name, points: 5 }
+        Self {
+            name,
+            points: 5,
+            hand: Vec::new(),
+        }
     }
 }
 

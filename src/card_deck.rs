@@ -6,7 +6,7 @@ enum Suits {
     Spades,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct Card<'a> {
     value: u8,
     name: &'a str,
