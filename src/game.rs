@@ -35,6 +35,7 @@ pub(crate) fn start_new_game(game_state: &mut GameState) {
 
 const MAX_CARDS: usize = 3;
 
+/// Deal cards on the table (when table has no cards).
 pub(crate) fn deal_table_cards<'a>(card_deck: &mut Vec<Card<'a>>, table: &mut Vec<Card<'a>>) {
     if table.is_empty() {
         for _ in 0..MAX_CARDS {
@@ -43,6 +44,7 @@ pub(crate) fn deal_table_cards<'a>(card_deck: &mut Vec<Card<'a>>, table: &mut Ve
     }
 }
 
+/// Deal cards to players (when hands are empty).
 pub(crate) fn deal_player_cards<'a>(card_deck: &mut Vec<Card<'a>>, players: &mut Vec<Player<'a>>) {
     for player in players {
         if player.hand.is_empty() {
