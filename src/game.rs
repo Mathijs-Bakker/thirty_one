@@ -38,12 +38,7 @@ const MAX_CARDS: usize = 3;
 pub(crate) fn deal_table_cards<'a>(card_deck: &mut Vec<Card<'a>>, table: &mut Vec<Card<'a>>) {
     if table.is_empty() {
         for _ in 0..MAX_CARDS {
-            let top_card = &card_deck[card_deck.len() - 1];
-
-            table.push(*top_card);
-            log::info!("deal_table_cards() - Table got {:?} ", top_card);
-
-            card_deck.pop();
+            get_card_on_top_and_swap(card_deck, table);
         }
     }
 }
@@ -52,23 +47,14 @@ pub(crate) fn deal_player_cards<'a>(card_deck: &mut Vec<Card<'a>>, players: &mut
     for player in players {
         if player.hand.is_empty() {
             for _ in 0..MAX_CARDS {
-                let top_card = &card_deck[card_deck.len() - 1];
-
-                player.hand.push(*top_card);
-
-                log::info!(
-                    "deal_player_cards() - Player {:?} got {:?}",
-                    player.name,
-                    top_card
-                );
-
-                card_deck.pop();
+                get_card_on_top_and_swap(card_deck, &mut player.hand);
             }
         }
     }
 }
 
-pub(crate) fn logic() {
-    // Deal Cards
-    // New turn
+fn get_card_on_top_and_swap<'a>(origin: &mut Vec<Card<'a>>, destination: &mut Vec<Card<'a>>) {
+    let top_card = &origin[origin.len() - 1];
+    destination.push(*top_card);
+    origin.pop();
 }
