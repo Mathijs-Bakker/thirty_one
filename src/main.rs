@@ -4,7 +4,10 @@ mod card_deck;
 mod game;
 mod player;
 
-use crate::card_deck::Card;
+use crate::{
+    card_deck::Card,
+    game::{deal_player_cards, deal_table_cards},
+};
 use game::GameState;
 use player::Player;
 use rand::{seq::SliceRandom, thread_rng};
@@ -33,41 +36,6 @@ fn main() {
             GameState::ActiveGame => {
                 deal_player_cards(&mut deck, &mut players);
                 deal_table_cards(&mut deck, &mut table);
-            }
-        }
-    }
-}
-
-const MAX_CARDS: usize = 3;
-
-fn deal_table_cards<'a>(card_deck: &mut Vec<Card<'a>>, table: &mut Vec<Card<'a>>) {
-    if table.is_empty() {
-        for _ in 0..MAX_CARDS {
-            let top_card = &card_deck[card_deck.len() - 1];
-
-            table.push(*top_card);
-            log::info!("deal_table_cards() - Table got {:?} ", top_card);
-
-            card_deck.pop();
-        }
-    }
-}
-
-fn deal_player_cards<'a>(card_deck: &mut Vec<Card<'a>>, players: &mut Vec<Player<'a>>) {
-    for player in players {
-        if player.hand.is_empty() {
-            for _ in 0..MAX_CARDS {
-                let top_card = &card_deck[card_deck.len() - 1];
-
-                player.hand.push(*top_card);
-
-                log::info!(
-                    "deal_player_cards() - Player {:?} got {:?}",
-                    player.name,
-                    top_card
-                );
-
-                card_deck.pop();
             }
         }
     }
