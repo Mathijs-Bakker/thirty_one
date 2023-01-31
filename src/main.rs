@@ -6,7 +6,7 @@ mod player;
 
 use crate::{
     card_deck::Card,
-    game::{deal_player_cards, deal_table_cards},
+    game::{deal_player_cards, deal_table_cards, game_play},
 };
 use game::GameState;
 use player::Player;
@@ -36,6 +36,7 @@ fn main() {
             GameState::ActiveGame => {
                 deal_player_cards(&mut deck, &mut players);
                 deal_table_cards(&mut deck, &mut table);
+                game_play(&players, &table);
             }
         }
     }

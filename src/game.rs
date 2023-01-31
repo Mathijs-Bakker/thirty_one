@@ -1,6 +1,8 @@
+use crate::{
+    card_deck::Card,
+    player::{Ai, Player},
+};
 use std::io::stdin;
-
-use crate::{card_deck::Card, player::Player};
 
 #[allow(clippy::module_name_repetitions)]
 pub enum GameState {
@@ -59,4 +61,34 @@ fn get_card_on_top_and_swap<'a>(origin: &mut Vec<Card<'a>>, destination: &mut Ve
     let top_card = &origin[origin.len() - 1];
     destination.push(*top_card);
     origin.pop();
+}
+
+fn render_cards(cards: &Vec<Card>) {
+    let card1 = format!("  |{:?} {:?}|", cards[0].name, cards[0].suit,);
+    let card2 = format!("  |{:?} {:?}|", cards[1].name, cards[1].suit,);
+    let card3 = format!("  |{:?} {:?}|", cards[2].name, cards[2].suit,);
+
+    println!("{card1}{card2}{card3}");
+}
+
+pub(crate) fn game_play(players: &Vec<Player>, table: &Vec<Card>) {
+    // render table cards - V
+    // render player cards - V
+    // if player 31 -> Win
+    // player turn
+    // --> Bots using ai (todo)
+    // --> Human player -> swap cards with table
+
+    println!("Table:");
+    render_cards(table);
+
+    for player in players {
+        if let Ai::Human = player.ai {
+            println!("{:?}", player.name);
+            render_cards(&player.hand);
+        } else {
+            println!("Bot");
+            println!("| ? |  | ? |  | ? |");
+        }
+    }
 }

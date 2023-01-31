@@ -1,5 +1,5 @@
 #[derive(Debug, Clone, Copy)]
-enum Suits {
+pub enum Suits {
     Clubs,
     Diamonds,
     Hearts,
@@ -8,9 +8,9 @@ enum Suits {
 
 #[derive(Debug, Clone, Copy)]
 pub struct Card<'a> {
-    value: u8,
-    name: &'a str,
-    suit: Suits,
+    pub value: u8,
+    pub name: &'a str,
+    pub suit: Suits,
 }
 
 const CARD_VALUES: &[(&str, u8); 8] = &[

@@ -4,15 +4,23 @@ use rand::thread_rng;
 use crate::card_deck::Card;
 
 #[derive(Debug)]
+pub enum Ai {
+    Bot,
+    Human,
+}
+
+#[derive(Debug)]
 pub struct Player<'a> {
+    pub ai: Ai,
     pub name: String,
     pub points: u8,
     pub hand: Vec<Card<'a>>,
 }
 
 impl<'a> Player<'a> {
-    pub fn new(name: String) -> Self {
+    pub fn new(ai: Ai, name: String) -> Self {
         Self {
+            ai,
             name,
             points: 5,
             hand: Vec::new(),
@@ -26,15 +34,15 @@ pub(crate) fn setup_players(players: &mut Vec<Player>) {
 
     // Give player names
     // Todo: Names should be generated randomly, using real human names.
-    let player_names: Vec<String> = vec![
-        "West".to_string(),
-        "North".to_string(),
-        "East".to_string(),
-        "You".to_string(),
+    let default_players: Vec<(Ai, String)> = vec![
+        (Ai::Bot, "West".to_string()),
+        (Ai::Bot, "North".to_string()),
+        (Ai::Bot, "East".to_string()),
+        (Ai::Human, "You".to_string()),
     ];
 
-    for name in player_names {
-        players.push(Player::new(name));
+    for def in default_players {
+        players.push(Player::new(def.0, def.1));
     }
 
     // Shuffle players to determine which player starts
